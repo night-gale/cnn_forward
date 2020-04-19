@@ -4,6 +4,7 @@
 
 #include "cnn_layers/conv.hpp"
 #include <iostream>
+#include <fstream>
 
 using namespace cnn_forward;
 
@@ -49,8 +50,19 @@ void Conv2d::forward(vector<MatrixXf>& output, vector<MatrixXf>& x) {
 void Conv2d::load_weights(const string &path) {
     m_bias = MatrixXf::Ones(1, m_output_channels);
     m_weights = MatrixXf::Ones(m_k_size*m_k_size*m_input_channels, m_output_channels);
-        // read weights file from path
-        // load weights to m_weights;
+    fstream fin;
+    fin.open(path);
+
+    string first_line;
+    getline(fin, first_line);
+    for(int i = 0; i < m_weights.rows(); i++) {
+        for(int j = 0; j < m_weights.cols(); j++) {
+            fin >> m_weights(i, j);
+        }
+    }
+//    while(!fin.eof()) getline(fin, );
+//    cout << m_weights << endl;
+    fin.close();
 }
 
 bool cnn_forward::im2col(MatrixXf& output, vector<MatrixXf>& x, int ksize, int stride) {
