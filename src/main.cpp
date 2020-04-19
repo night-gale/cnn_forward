@@ -18,17 +18,17 @@ int main() {
         input.emplace_back(MatrixXf(28, 3));
         input[i] = MatrixXf::Ones(28, 3);
     }
-    vector<int> conv1_shape = {1, 28, 28, 3};
-    Conv2d conv1(conv1_shape, 12, 3, 1);
-    conv1.load_weights("path");
+    vector<int> conv1_shape = {1, 28, 28, 1};
+    Conv2d conv1(conv1_shape, 12, 5, 1);
+    conv1.load_weights("../weights/conv1.weights");
     Relu relu1(conv1.getOutputShape());
     MaxPooling pool1(relu1.getOutputShape());
     Conv2d conv2(pool1.getOutputShape(), 24, 3, 1);
-    conv2.load_weights("path");
+    conv2.load_weights("../weights/conv2.weights");
     Relu relu2(conv2.getOutputShape());
     MaxPooling pool2(relu2.getOutputShape());
     FullyConnect fc(pool2.getOutputShape(), 2);
-    fc.loadWeights("path");
+    fc.loadWeights("../weights/fc.weights");
     Softmax sm(fc.getOutputShape());
     vector<MatrixXf> conv1_out;
     vector<MatrixXf> relu1_out;
