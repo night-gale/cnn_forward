@@ -32,9 +32,13 @@ void Conv2d::forward(vector<MatrixXf>& output, vector<MatrixXf>& x) {
     }
     MatrixXf img_col;
     im2col(img_col, x, m_k_size, m_stride);
-    cout << img_col.cols() << endl;
-    cout << m_weights.rows() << endl;
+
     MatrixXf conv_out = img_col * m_weights;
+
+    for(int i = 0; i < conv_out.cols(); i++) {
+        conv_out.block(0, i, conv_out.rows(), 1) <<
+                conv_out.block(0, i, conv_out.rows(), 1) + m_bias(0, i)*MatrixXf::Ones(conv_out.rows(), 1);
+    }
 
 
     for(int i = 0; i < m_output_shape[1]; i++) {
@@ -43,37 +47,45 @@ void Conv2d::forward(vector<MatrixXf>& output, vector<MatrixXf>& x) {
         for(int j = 0; j < m_output_shape[2]; j++) {
             output[i].row(j) << conv_out.row(i * m_output_shape[2] + j);
         }
+
     }
-//    cout << output[1] << endl;
+
 }
 
-void Conv2d::load_weights(const string &path) {
-    m_bias = MatrixXf::Ones(1, m_output_channels);
+void Conv2d::load_weights(const string &path_weights, const string&path_bias) {
+    m_bias = MatrixXf::Zero(1, m_output_channels);
     m_weights = MatrixXf::Ones(m_k_size*m_k_size*m_input_channels, m_output_channels);
     fstream fin;
-    fin.open(path);
+    fin.open(path_weights);
 
-    string first_line;
-    getline(fin, first_line);
+//    string first_line;
+//    getline(fin, first_line);
     for(int i = 0; i < m_weights.rows(); i++) {
         for(int j = 0; j < m_weights.cols(); j++) {
             fin >> m_weights(i, j);
         }
     }
-//    while(!fin.eof()) getline(fin, );
-//    cout << m_weights << endl;
+
+    fin.close();
+    fin.open(path_bias);
+    for(int i = 0; i < m_bias.cols(); i++) {
+        fin >> m_bias(0, i);
+    }
     fin.close();
 }
+
+Conv2d::Conv2d() {}
 
 bool cnn_forward::im2col(MatrixXf& output, vector<MatrixXf>& x, int ksize, int stride) {
     output = MatrixXf(((x.size() - ksize + 1)/stride)*((x[0].rows() - ksize + 1)/stride), ksize * ksize * x[0].cols());
     for(int i = 0; i < (x.size() - ksize + 1)/stride; i++) {
-//        cout << x[i] << endl;
-//        cout << x[i].rows() << endl;
-//        cout << x[i].cols() << endl;
+        // i for row selection
         for(int j = 0; j < (x[i].rows() - ksize + 1)/stride; j++) {
+            // j for col selection
             for(int a = 0; a < ksize; a++) {
-                MatrixXf temp = x[a].block(j, 0, ksize, x[i].cols());
+                // x[a, j:j+ksize, :]
+                MatrixXf temp = x[i+a].block(j, 0, ksize, x[i].cols());
+                temp.transposeInPlace();
                 temp.resize(1, temp.cols() * temp.rows());
                 output.block((i*(x.size()-ksize+1)+j), a * ksize * x[i].cols(), 1, ksize*x[i].cols()) << temp;
             }

@@ -16,3 +16,5 @@ void Relu::forward(vector<MatrixXf> &output, vector<MatrixXf> x) {
         output[i] << x[i].array().max(MatrixXf::Zero(x[i].rows(), x[i].cols()).array());
     }
 }
+
+Relu::Relu() {}

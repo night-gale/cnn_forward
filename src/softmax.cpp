@@ -19,3 +19,5 @@ void Softmax::forward(MatrixXf &result, MatrixXf &x) {
     exp_pre << x.array().exp();
     result = exp_pre/exp_pre.sum();
 }
+
+Softmax::Softmax() {}

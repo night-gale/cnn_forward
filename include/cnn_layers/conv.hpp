@@ -24,9 +24,11 @@ namespace cnn_forward {
     public:
         Conv2d(const vector<int>& shape, int output_channels, int ksize = 3, int stride = 1, const string & method = "VALID");
 
+        Conv2d();
+
         void forward(vector<MatrixXf>& output,  vector<MatrixXf>& x);
 
-        void load_weights(const string & path);
+        void load_weights(const string &path_weights, const string &path_bias);
 
         vector<int>& getOutputShape() {
             return m_output_shape;

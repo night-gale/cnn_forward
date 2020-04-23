@@ -19,8 +19,11 @@ namespace cnn_forward {
 
     public:
         FullyConnect(vector<int>& shape, int output_num);
+
+        FullyConnect();
+
         void forward(MatrixXf& output, vector<MatrixXf>& x);
-        void loadWeights(const string & path);
+        void loadWeights(const string & path_weights, const string &path_bias);
         vector<int>& getOutputShape() {
             return m_output_shape;
         };

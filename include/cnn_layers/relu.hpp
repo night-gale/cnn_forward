@@ -11,7 +11,9 @@ namespace cnn_forward {
     private:
         vector<int> m_shape;
     public:
-        Relu(const vector<int>& shape);
+        explicit Relu(const vector<int>& shape);
+
+        Relu();
 
         void forward(vector<MatrixXf>& output, vector<MatrixXf> x);
 

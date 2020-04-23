@@ -17,7 +17,9 @@ namespace cnn_forward {
         vector<int> m_output_shape;
 
     public:
-        MaxPooling(vector<int>& shape, int ksize=2, int stride=2);
+        explicit MaxPooling(vector<int>& shape, int ksize=2, int stride=2);
+
+        MaxPooling();
 
         void forward(vector<MatrixXf> &output, vector<MatrixXf> &x);
 

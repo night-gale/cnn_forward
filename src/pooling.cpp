@@ -33,3 +33,5 @@ void MaxPooling::forward(vector<MatrixXf> &output, vector<MatrixXf> &x) {
         }
     }
 }
+
+MaxPooling::MaxPooling() {}

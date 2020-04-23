@@ -11,7 +11,9 @@ namespace cnn_forward {
         std::vector<int> m_shape;
 
     public:
-        Softmax(std::vector<int>& shape);
+        explicit Softmax(std::vector<int>& shape);
+
+        Softmax();
 
         void forward(Eigen::MatrixXf &result, Eigen::MatrixXf &x);
     };
