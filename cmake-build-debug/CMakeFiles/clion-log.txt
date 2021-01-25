@@ -1,4 +1,0 @@
-"D:\tools\CLion 2019.3.4\bin\cmake\win\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - MinGW Makefiles" D:\workspace\cnn_forward
--- Configuring done
--- Generating done
--- Build files have been written to: D:/workspace/cnn_forward/cmake-build-debug
